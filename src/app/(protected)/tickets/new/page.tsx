@@ -9,7 +9,7 @@ export default function NewTicketPage() {
   return (
     <div className="mx-auto max-w-4xl px-0 py-3">
       <div className="stagger-in mb-12" style={{ animationDelay: "0.1s" }}>
-        <h2 className="text-[32px] font-semibold leading-[40px] tracking-wide text-on-surface">
+        <h2 className="text-[32px] font-semibold leading-10 tracking-wide text-on-surface">
           Crear Nuevo Ticket
         </h2>
         <p className="mt-2 max-w-xl text-sm text-on-surface-variant">

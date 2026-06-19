@@ -6,10 +6,10 @@ import "./globals.css";
 const geistSans = localFont({
   src: [
     {
-      path: "../public/fonts/Geist-VariableFont_wght.ttf",
+      path: "../../public/fonts/Geist-VariableFont_wght.ttf",
     },
     {
-      path: "../public/fonts/Geist-Italic-VariableFont_wght.ttf",
+      path: "../../public/fonts/Geist-Italic-VariableFont_wght.ttf",
       style: "italic",
     },
   ],
@@ -19,10 +19,10 @@ const geistSans = localFont({
 const geistMono = localFont({
   src: [
     {
-      path: "../public/fonts/GeistMono-VariableFont_wght.woff2",
+      path: "../../public/fonts/GeistMono-VariableFont_wght.woff2",
     },
     {
-      path: "../public/fonts/GeistMono-Italic-VariableFont_wght.woff2",
+      path: "../../public/fonts/GeistMono-Italic-VariableFont_wght.woff2",
       style: "italic",
     },
   ],

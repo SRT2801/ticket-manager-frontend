@@ -214,7 +214,7 @@ export default function TicketDetailClient({ id }: TicketDetailClientProps) {
                   disabled={updating || status === ticket.status}
                   className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-sm font-medium transition-all ${
                     status === ticket.status
-                      ? "cursor-default border-glass-stroke bg-white/[0.03] text-outline"
+                      ? "cursor-default border-glass-stroke bg-white/3 text-outline"
                       : `${statusBtnColors[status]} border`
                   } disabled:opacity-50`}
                 >

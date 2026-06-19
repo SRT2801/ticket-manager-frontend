@@ -41,7 +41,7 @@ export default function KpiCard({
       <p className="mb-1 text-sm font-semibold tracking-wider text-on-surface-variant">
         {label}
       </p>
-      <h3 className="mb-4 text-[48px] font-bold leading-[56px] tracking-wider text-on-surface">
+      <h3 className="mb-4 text-[48px] font-bold leading-14 tracking-wider text-on-surface">
         {value.toLocaleString()}
       </h3>
       <div className="h-10 w-full">
