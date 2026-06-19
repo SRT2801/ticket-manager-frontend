@@ -24,6 +24,15 @@
 .DS_Store
 *.pem
 
+# Third-party tools and agents
+.agents/
+.skills/
+.tools/
+
+# Agent instructions
+AGENTS.md
+skills-lock.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*
