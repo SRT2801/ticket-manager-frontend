@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, User, Eye, Edit } from "lucide-react";
+import { Calendar, AlertTriangle, Eye, Edit } from "lucide-react";
 import type { Ticket } from "@/lib/types";
 import { PRIORITY_LABELS, STATUS_LABELS } from "@/lib/constants";
 import EditTicketModal from "@/components/tickets/edit-ticket-modal";
@@ -13,10 +13,10 @@ const priorityBarColors: Record<string, string> = {
   HIGH: "bg-status-urgent",
 };
 
-const priorityBadgeColors: Record<string, string> = {
-  LOW: "bg-status-closed/10 text-status-closed border border-status-closed/30",
-  MEDIUM: "bg-status-progress/10 text-status-progress border border-status-progress/30",
-  HIGH: "bg-error-container/20 text-status-urgent border border-status-urgent/30",
+const priorityTextColors: Record<string, string> = {
+  LOW: "text-status-closed",
+  MEDIUM: "text-status-progress",
+  HIGH: "text-status-urgent",
 };
 
 const statusBadgeColors: Record<string, string> = {
@@ -34,7 +34,6 @@ interface TicketRowProps {
 export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
   const [showModal, setShowModal] = useState(false);
   const barColor = priorityBarColors[ticket.priority] || "bg-slate-500";
-  const priorityBadge = priorityBadgeColors[ticket.priority] || priorityBadgeColors.LOW;
   const statusBadge = statusBadgeColors[ticket.status] || statusBadgeColors.OPEN;
 
   function handleUpdated(updated: Ticket) {
@@ -72,19 +71,14 @@ export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
                 timeZone: "UTC",
               })}
             </span>
-            <span className="flex items-center gap-1 text-sm text-on-surface-variant">
-              <User className="h-4 w-4" />
-              Usuario #{ticket.userId}
+            <span className={`flex items-center gap-1 text-sm ${priorityTextColors[ticket.priority]}`}>
+              <AlertTriangle className="h-4 w-4" />
+              {PRIORITY_LABELS[ticket.priority]}
             </span>
           </div>
         </div>
 
-        <div className="hidden flex-col items-end gap-2 px-6 lg:flex">
-          <div
-            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${priorityBadge}`}
-          >
-            {PRIORITY_LABELS[ticket.priority]}
-          </div>
+        <div className="hidden items-end lg:flex">
           <div
             className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusBadge}`}
           >

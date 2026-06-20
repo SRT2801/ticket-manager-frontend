@@ -14,13 +14,6 @@ export default function Topbar() {
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="relative rounded-full p-2 text-on-surface-variant transition-all hover:bg-surface-variant/30">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full border border-surface bg-status-urgent" />
-        </button>
-        <button className="rounded-full p-2 text-on-surface-variant transition-all hover:bg-surface-variant/30">
-          <Settings className="h-5 w-5" />
-        </button>
         <div className="flex items-center gap-3 border-l border-glass-stroke pl-4">
           <div className="text-right">
             <p className="text-sm font-semibold tracking-wider text-on-surface">
