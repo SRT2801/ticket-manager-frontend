@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { apiRequest, ApiError } from "@/lib/api";
-import type { Ticket, UpdateTicketInput } from "@/lib/types";
+import type { Ticket, TicketPriority, UpdateTicketInput } from "@/lib/types";
 import { PRIORITY_LABELS } from "@/lib/constants";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
@@ -13,6 +13,12 @@ interface EditTicketModalProps {
   onUpdated: (ticket: Ticket) => void;
 }
 
+const PRIORITY_DOT_COLORS: Record<TicketPriority, string> = {
+  LOW: "#10B981",
+  MEDIUM: "#F59E0B",
+  HIGH: "#F43F5E",
+};
+
 export default function EditTicketModal({
   ticket,
   onClose,
@@ -20,9 +26,26 @@ export default function EditTicketModal({
 }: EditTicketModalProps) {
   const [title, setTitle] = useState(ticket.title);
   const [description, setDescription] = useState(ticket.description);
-  const [priority, setPriority] = useState(ticket.priority);
+  const [priority, setPriority] = useState<TicketPriority>(ticket.priority);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [closing, setClosing] = useState(false);
+
+  function handleClose() {
+    setClosing(true);
+    setTimeout(() => onClose(), 200);
+  }
+
+  useEffect(() => {
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setClosing(true);
+        setTimeout(() => onClose(), 200);
+      }
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [onClose]);
 
   async function handleSave() {
     setLoading(true);
@@ -38,7 +61,7 @@ export default function EditTicketModal({
         body: JSON.stringify(input),
       });
       onUpdated(result);
-      onClose();
+      handleClose();
     } catch (err) {
       setError(
         err instanceof ApiError ? err.message : "Error al actualizar el ticket"
@@ -49,31 +72,47 @@ export default function EditTicketModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="glass-card neo-raised w-full max-w-lg rounded-2xl p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-on-surface">
-            Editar Ticket #{ticket.id}
-          </h2>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-1.5 text-on-surface-variant transition-all hover:bg-surface-variant/50"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center p-6 ${
+        closing ? "animate-fade-out" : "animate-fade-in"
+      }`}
+      style={{ backgroundColor: "rgba(0,0,0,0.7)" }}
+      onClick={handleClose}
+    >
+      <div
+        className={`glass-modal relative w-full max-w-lg rounded-[10px] p-10 ${
+          closing ? "animate-modal-out" : "animate-modal-in"
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={handleClose}
+          className="absolute right-8 top-8 text-on-surface-variant/50 transition-colors hover:text-on-surface"
+        >
+          <X className="h-5 w-5" />
+        </button>
 
-        {error && (
-          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-            {error}
-          </div>
-        )}
+        <header className="mb-10">
+          <h1 className="text-xl font-medium tracking-tight text-on-surface">
+            Editar Ticket{" "}
+            <span className="text-on-surface-variant/50">#{ticket.id}</span>
+          </h1>
+          <p className="mt-1.5 text-[13px] leading-relaxed text-on-surface-variant/50">
+            Actualiza los detalles y la prioridad de la incidencia tecnica.
+          </p>
+        </header>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
+        <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+          {error && (
+            <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              {error}
+            </div>
+          )}
+
+          <div>
             <label
               htmlFor="edit-title"
-              className="text-sm font-medium text-on-surface-variant"
+              className="mb-2.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-on-surface-variant/60"
             >
               Titulo
             </label>
@@ -82,14 +121,15 @@ export default function EditTicketModal({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="rounded-xl border border-glass-stroke bg-surface px-3 py-2 text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="minimal-input w-full rounded-[10px] px-4 py-3 text-[14px] text-on-surface placeholder:text-on-surface-variant/30"
+              placeholder="Asunto del ticket..."
             />
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div>
             <label
               htmlFor="edit-description"
-              className="text-sm font-medium text-on-surface-variant"
+              className="mb-2.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-on-surface-variant/60"
             >
               Descripcion
             </label>
@@ -98,53 +138,79 @@ export default function EditTicketModal({
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="resize-none rounded-xl border border-glass-stroke bg-surface px-3 py-2 text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="minimal-input w-full resize-none rounded-[10px] px-4 py-3 text-[14px] text-on-surface placeholder:text-on-surface-variant/30"
             />
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="edit-priority"
-              className="text-sm font-medium text-on-surface-variant"
-            >
+          <div>
+            <label className="mb-3.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-on-surface-variant/60">
               Prioridad
             </label>
-            <select
-              id="edit-priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as Ticket["priority"])}
-              className="rounded-xl border border-glass-stroke bg-surface px-3 py-2 text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-            >
-              {(
-                Object.entries(PRIORITY_LABELS) as [
-                  Ticket["priority"],
-                  string,
-                ][]
-              ).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
-              ))}
-            </select>
+            <div className="flex flex-wrap gap-2">
+              {(Object.entries(PRIORITY_LABELS) as [TicketPriority, string][]).map(
+                ([key, label]) => {
+                  const color = PRIORITY_DOT_COLORS[key];
+                  const isSelected = priority === key;
+                  return (
+                    <label key={key} className="cursor-pointer">
+                      <input
+                        className="peer sr-only"
+                        type="radio"
+                        name="edit-priority"
+                        value={key}
+                        checked={isSelected}
+                        onChange={() => setPriority(key)}
+                      />
+                      <span
+                        className="flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-medium transition-all"
+                        style={
+                          isSelected
+                            ? {
+                                color,
+                                background: `${color}0D`,
+                                borderColor: `${color}33`,
+                                borderWidth: "1px",
+                                borderStyle: "solid",
+                              }
+                            : {
+                                color: "#c7c4d7",
+                                borderColor: "transparent",
+                                borderWidth: "1px",
+                                borderStyle: "solid",
+                              }
+                        }
+                      >
+                        <span
+                          className="h-1.5 w-1.5 rounded-full bg-current opacity-60"
+                        />
+                        {label}
+                      </span>
+                    </label>
+                  );
+                }
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="mt-6 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="rounded-xl border border-glass-stroke px-4 py-2 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-variant/50"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={loading || !title.trim()}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-on-primary transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading && <LoadingSpinner className="h-4 w-4 text-on-primary" />}
-            Guardar
-          </button>
-        </div>
+          <div className="flex items-center justify-end gap-3 pt-4">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="px-5 py-2 text-[13px] font-medium text-on-surface-variant/60 transition-colors hover:text-on-surface"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={loading || !title.trim()}
+              className="rounded-[10px] bg-primary px-6 py-2 text-[13px] font-semibold text-on-primary shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading && <LoadingSpinner className="mr-1 inline h-3.5 w-3.5 text-on-primary" />}
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
