@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuth } from "@/lib/auth";
-import { Bell, Settings } from "lucide-react";
 
 export default function Topbar() {
   const { user } = useAuth();
