@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Plus } from "lucide-react";
 import TicketList from "@/components/tickets/ticket-list";
-import ExportButton from "@/components/tickets/export-button";
+import ExportTicketsButton from "@/components/tickets/export-tickets-button";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
 export const metadata: Metadata = {
@@ -23,10 +23,9 @@ export default function TicketsPage() {
           </p>
         </div>
         <div className="flex gap-4">
-          <ExportButton
-            query="/reports/tickets/export"
-            label="Exportar a Excel"
-          />
+          <Suspense>
+            <ExportTicketsButton />
+          </Suspense>
           <Link
             href="/tickets/new"
             className="neomorphic-raised inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-on-primary transition-all hover:brightness-110"
