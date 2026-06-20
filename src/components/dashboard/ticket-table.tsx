@@ -2,45 +2,34 @@ import type { Ticket } from "@/lib/types";
 import { PRIORITY_LABELS, STATUS_LABELS } from "@/lib/constants";
 import Link from "next/link";
 
-const priorityConfig: Record<
-  string,
-  { bg: string; text: string; dot: string }
-> = {
+const priorityConfig: Record<string,{ bg: string; text: string; dot: string }> = {
   LOW: {
-    bg: "bg-on-surface-variant/10",
-    text: "text-on-surface-variant",
-    dot: "bg-on-surface-variant",
+    bg: "bg-status-closed/10",
+    text: "text-status-closed",
+    dot: "bg-status-closed",
   },
   MEDIUM: {
-    bg: "bg-secondary/10",
-    text: "text-secondary",
-    dot: "bg-secondary",
+    bg: "bg-status-progress/10",
+    text: "text-status-progress",
+    dot: "bg-status-progress",
   },
   HIGH: {
-    bg: "bg-primary/10",
-    text: "text-primary",
-    dot: "bg-primary",
+    bg: "bg-status-urgent/10",
+    text: "text-status-urgent",
+    dot: "bg-status-urgent",
   },
 };
 
 const statusConfig: Record<string, string> = {
-  OPEN: "bg-surface-variant text-on-surface-variant",
-  IN_PROGRESS: "bg-status-progress/10 text-status-progress",
+  OPEN: "bg-status-progress/10 text-status-progress",
+  IN_PROGRESS: "bg-primary/10 text-primary",
   CLOSED: "bg-status-closed/10 text-status-closed",
 };
-
-function getInitials(title: string): string {
-  return title
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
-}
 
 function getTimeAgo(date: string): string {
   const diff = Date.now() - new Date(date).getTime();
   const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "hace un momento";
   if (mins < 60) return `hace ${mins}m`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `hace ${hours}h`;
@@ -98,10 +87,10 @@ export default function TicketTable({ tickets }: { tickets: Ticket[] }) {
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-2">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary-container text-xs font-medium">
-                        {getInitials(ticket.title)}
+                        {ticket.userName.charAt(0).toUpperCase()}
                       </div>
                       <span className="text-on-surface-variant">
-                        {ticket.title.split(" ").slice(0, 2).join(" ")}
+                        {ticket.userName}
                       </span>
                     </div>
                   </td>
