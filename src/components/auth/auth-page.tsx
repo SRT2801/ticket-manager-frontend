@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useActionState, startTransition } from "react";
-import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { z } from "zod";
 import { ArrowRight, UserPlus, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
@@ -26,8 +25,6 @@ type FormState = {
 
 export default function AuthPage() {
   const { login, register } = useAuth();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
 
   const [mode, setMode] = useState<"login" | "register">("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +39,7 @@ export default function AuthPage() {
     }
     try {
       await login(result.data);
-      window.location.href = redirectTo;
+      window.location.href = "/dashboard";
       return {};
     } catch (err: unknown) {
       return { message: err instanceof Error ? err.message : "Error al iniciar sesion" };
