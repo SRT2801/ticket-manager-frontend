@@ -22,17 +22,17 @@ export default function TicketsPage() {
             Gestiona y explora todos los tickets de soporte.
           </p>
         </div>
-        <div className="flex gap-4">
-          <Suspense>
-            <ExportTicketsButton />
-          </Suspense>
+        <div className="flex gap-3">
           <Link
             href="/tickets/new"
-            className="neomorphic-raised inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-on-primary transition-all hover:brightness-110"
+            className="neomorphic-raised inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-all hover:brightness-110"
           >
             <Plus className="h-4 w-4" />
             Nuevo Ticket
           </Link>
+          <Suspense>
+            <ExportTicketsButton />
+          </Suspense>
         </div>
       </div>
 

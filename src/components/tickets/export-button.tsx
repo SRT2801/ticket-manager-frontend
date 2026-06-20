@@ -61,7 +61,7 @@ export default function ExportButton({
       <button
         onClick={handleExport}
         disabled={loading}
-        className="inline-flex items-center gap-2 rounded-xl border border-glass-stroke bg-surface px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex items-center gap-2 rounded-xl border border-glass-stroke bg-surface px-5 py-2.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? (
           <LoadingSpinner className="h-4 w-4" />

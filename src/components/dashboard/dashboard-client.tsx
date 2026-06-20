@@ -152,18 +152,18 @@ export default function DashboardClient() {
               : "Bienvenido. Todo en orden."}
           </p>
         </div>
-        <div className="flex gap-4">
-          <ExportButton
-            query="/reports/tickets/export"
-            label="Exportar Reporte"
-          />
+        <div className="flex gap-3">
           <Link
             href="/tickets/new"
-            className="neo-raised inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold tracking-wider text-on-primary transition-all hover:brightness-110"
+            className="neo-raised inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold tracking-wider text-on-primary transition-all hover:brightness-110"
           >
             <Plus className="h-4 w-4" />
             Nuevo Ticket
           </Link>
+          <ExportButton
+            query="/reports/tickets/export"
+            label="Exportar Reporte"
+          />
         </div>
       </div>
 
