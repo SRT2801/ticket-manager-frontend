@@ -1,1 +1,5 @@
-import type { Metadata } from "next"; import Link from "next/link"; import { Ticket } from "lucide-react"; import RegisterForm from "@/components/auth/register-form"; export const metadata: Metadata = { title: "Registro - Ticket Manager", }; export default function RegisterPage() { return ( <div className="rounded-2xl border border-glass-stroke bg-glass-fill p-8 shadow-lg backdrop-blur-xl"> <div className="mb-6 flex items-center gap-2"> <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white"> <Ticket className="h-4 w-4" /> </div> <span className=" text-sm font-bold text-on-surface"> Ticket Manager </span> </div> <h1 className="mb-1 text-xl font-semibold text-on-surface"> Crear cuenta </h1> <p className="mb-6 text-sm text-outline"> Completa tus datos para registrarte </p> <RegisterForm /> <p className="mt-6 text-center text-sm text-on-surface-variant"> Ya tienes cuenta?{" "} <Link href="/login" className="font-medium text-primary hover:brightness-110"> Inicia sesion </Link> </p> </div> ); } 
+import { redirect } from "next/navigation";
+
+export default function RegisterPage() {
+  redirect("/login");
+}

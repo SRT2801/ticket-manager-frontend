@@ -1,1 +1,15 @@
-import type { Metadata } from "next"; import Link from "next/link"; import { Suspense } from "react"; import { Ticket } from "lucide-react"; import LoginForm from "@/components/auth/login-form"; export const metadata: Metadata = { title: "Iniciar sesion - Ticket Manager", }; export default function LoginPage() { return ( <div className="rounded-2xl border border-glass-stroke bg-glass-fill p-8 shadow-lg backdrop-blur-xl"> <div className="mb-6 flex items-center gap-2"> <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white"> <Ticket className="h-4 w-4" /> </div> <span className=" text-sm font-bold text-on-surface"> Ticket Manager </span> </div> <h1 className="mb-1 text-xl font-semibold text-on-surface"> Iniciar sesion </h1> <p className="mb-6 text-sm text-outline"> Ingresa tus credenciales para continuar </p> <Suspense> <LoginForm /> </Suspense> <p className="mt-6 text-center text-sm text-on-surface-variant"> No tienes cuenta?{" "} <Link href="/register" className="font-medium text-primary hover:brightness-110"> Registrate </Link> </p> </div> ); } 
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import AuthPage from "@/components/auth/auth-page";
+
+export const metadata: Metadata = {
+  title: "Autenticacion - Ticket Manager",
+};
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <AuthPage />
+    </Suspense>
+  );
+}
