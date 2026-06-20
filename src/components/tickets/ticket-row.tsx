@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Calendar, AlertTriangle, Eye, Edit } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Calendar, User, Eye, Edit } from "lucide-react";
 import type { Ticket } from "@/lib/types";
 import { PRIORITY_LABELS, STATUS_LABELS } from "@/lib/constants";
 import EditTicketModal from "@/components/tickets/edit-ticket-modal";
@@ -13,16 +13,10 @@ const priorityBarColors: Record<string, string> = {
   HIGH: "bg-status-urgent",
 };
 
-const priorityTextColors: Record<string, string> = {
-  LOW: "text-status-closed",
-  MEDIUM: "text-status-progress",
-  HIGH: "text-status-urgent",
-};
-
 const statusBadgeColors: Record<string, string> = {
-  OPEN: "bg-surface-variant/50 text-on-surface-variant",
-  IN_PROGRESS: "bg-surface-variant/50 text-on-surface-variant",
-  CLOSED: "bg-status-closed text-surface font-bold",
+  OPEN: "bg-status-progress/10 text-status-progress border border-status-progress/20",
+  IN_PROGRESS: "bg-primary/10 text-primary border border-primary/20",
+  CLOSED: "bg-status-closed/10 text-status-closed border border-status-closed/20",
 };
 
 interface TicketRowProps {
@@ -32,6 +26,7 @@ interface TicketRowProps {
 }
 
 export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const barColor = priorityBarColors[ticket.priority] || "bg-slate-500";
   const statusBadge = statusBadgeColors[ticket.status] || statusBadgeColors.OPEN;
@@ -43,8 +38,9 @@ export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
   return (
     <>
       <div
-        className="glass-card staggered-entry group flex items-center gap-6 rounded-xl p-5"
+        className="glass-card staggered-entry group flex cursor-pointer items-center gap-6 rounded-xl p-5"
         style={style}
+        onClick={() => router.push(`/tickets/${ticket.id}`)}
       >
         <div
           className={`h-12 w-2 shrink-0 rounded-full ${barColor}`}
@@ -52,12 +48,9 @@ export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
         />
 
         <div className="min-w-0 flex-1">
-          <Link
-            href={`/tickets/${ticket.id}`}
-            className="truncate text-[24px] font-semibold leading-8 text-on-surface transition-colors group-hover:text-primary"
-          >
+          <span className="truncate text-[24px] font-semibold leading-8 text-on-surface transition-colors group-hover:text-primary">
             {ticket.title}
-          </Link>
+          </span>
           <div className="mt-1 flex items-center gap-4">
             <span className="text-sm text-on-surface-variant">
               #TK-{ticket.id}
@@ -71,9 +64,9 @@ export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
                 timeZone: "UTC",
               })}
             </span>
-            <span className={`flex items-center gap-1 text-sm ${priorityTextColors[ticket.priority]}`}>
-              <AlertTriangle className="h-4 w-4" />
-              {PRIORITY_LABELS[ticket.priority]}
+            <span className="flex items-center gap-1 text-sm text-on-surface-variant">
+              <User className="h-4 w-4" />
+              {ticket.userName}
             </span>
           </div>
         </div>
@@ -87,14 +80,14 @@ export default function TicketRow({ ticket, style, onEdit }: TicketRowProps) {
         </div>
 
         <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-          <Link
-            href={`/tickets/${ticket.id}`}
-            className="rounded-lg bg-surface-variant/30 p-2 text-primary transition-all hover:bg-primary/20"
-          >
+          <span className="rounded-lg bg-surface-variant/30 p-2 text-primary">
             <Eye className="h-5 w-5" />
-          </Link>
+          </span>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowModal(true);
+            }}
             className="rounded-lg bg-surface-variant/30 p-2 text-secondary transition-all hover:bg-secondary/20"
           >
             <Edit className="h-5 w-5" />
