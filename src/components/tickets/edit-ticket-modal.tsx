@@ -112,7 +112,7 @@ export default function EditTicketModal({
           <div>
             <label
               htmlFor="edit-title"
-              className="mb-2.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-on-surface-variant/60"
+              className="mb-2.5 block text-[11px] font-semibold uppercase tracking-widest text-on-surface-variant/60"
             >
               Titulo
             </label>
@@ -129,7 +129,7 @@ export default function EditTicketModal({
           <div>
             <label
               htmlFor="edit-description"
-              className="mb-2.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-on-surface-variant/60"
+              className="mb-2.5 block text-[11px] font-semibold uppercase tracking-widest text-on-surface-variant/60"
             >
               Descripcion
             </label>
@@ -143,7 +143,7 @@ export default function EditTicketModal({
           </div>
 
           <div>
-            <label className="mb-3.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-on-surface-variant/60">
+            <label className="mb-3.5 block text-[11px] font-semibold uppercase tracking-widest text-on-surface-variant/60">
               Prioridad
             </label>
             <div className="flex flex-wrap gap-2">
