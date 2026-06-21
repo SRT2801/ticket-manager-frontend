@@ -37,7 +37,6 @@ services:
       MAIL_USER: ${MAIL_USER}
       MAIL_PASS: ${MAIL_PASS}
       MAIL_FROM: ${MAIL_FROM:-noreply@ticket-manager.com}
-      REPORT_RECIPIENTS: ${REPORT_RECIPIENTS:-admin@ticket-manager.com}
     ports:
       - "3000:3000"
     depends_on:
