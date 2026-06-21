@@ -128,9 +128,11 @@ docker compose stop frontend
 |-------|----------|-----|
 | `admin@ticket-manager.com` | `Admin123!` | Admin |
 
-## Swagger
+## Despliegue
 
-Documentacion interactiva de la API disponible en: **`http://localhost:3000/api`**
+- **Frontend (Vercel):** [ticket-manager-frontend-ten.vercel.app](https://ticket-manager-frontend-ten.vercel.app/login)
+- **Backend (Railway):** `ticket-manager-backend-production.up.railway.app`
+- **Swagger:** [ticket-manager-backend-production.up.railway.app/api](https://ticket-manager-backend-production.up.railway.app/api)
 
 ## Decisiones de arquitectura
 
