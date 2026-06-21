@@ -3,12 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   async rewrites() {
-    const apiUrl = process.env.API_URL || "http://localhost:3000";
+    let apiUrl = process.env.API_URL || "http://localhost:3000";
+
+    apiUrl = apiUrl.trim();
 
     if (!apiUrl.startsWith("http://") && !apiUrl.startsWith("https://")) {
-      throw new Error(
-        `Invalid API_URL: "${apiUrl}". Must start with http:// or https://`,
-      );
+      if (apiUrl !== "localhost:3000") {
+        apiUrl = `https://${apiUrl}`;
+      }
     }
 
     return [
