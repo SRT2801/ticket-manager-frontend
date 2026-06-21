@@ -78,7 +78,7 @@ export default function AuthPage() {
           Ticket Manager
         </h1>
         <p className="mt-1 text-sm text-on-surface-variant opacity-80">
-          Enterprise Support Excellence
+          Excelencia en soporte empresarial
         </p>
       </div>
 
