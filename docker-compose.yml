@@ -32,6 +32,11 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@ticket-manager.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin123!}
       PORT: 3000
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_FROM: ${MAIL_FROM:-noreply@ticket-manager.com}
     ports:
       - "3000:3000"
     depends_on:
