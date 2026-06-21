@@ -73,7 +73,7 @@ export default function TicketDetailClient({ id }: TicketDetailClientProps) {
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [updating, setUpdating] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState<TicketStatus | null>(null);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -104,7 +104,7 @@ export default function TicketDetailClient({ id }: TicketDetailClientProps) {
   }, [id]);
 
   async function handleStatusChange(status: TicketStatus) {
-    setUpdating(true);
+    setUpdatingStatus(status);
     setUpdateError(null);
     try {
       const result = await apiRequest<Ticket>(`/tickets/${id}/status`, {
@@ -118,7 +118,7 @@ export default function TicketDetailClient({ id }: TicketDetailClientProps) {
         err instanceof ApiError ? err.message : "Error al actualizar estado"
       );
     } finally {
-      setUpdating(false);
+      setUpdatingStatus(null);
     }
   }
 
@@ -285,12 +285,12 @@ export default function TicketDetailClient({ id }: TicketDetailClientProps) {
                   <button
                     key={status}
                     onClick={() => handleStatusChange(status)}
-                    disabled={updating || isActive}
+                    disabled={updatingStatus === status || isActive}
                     className={`flex w-full items-center justify-between rounded-2xl p-4 text-left font-bold transition-all ${
                       isActive
                         ? `${cfg.activeBg} border-2 ${cfg.activeBorder} ${cfg.activeText}`
                         : `border border-white/5 bg-white/5 text-on-surface-variant ${cfg.hoverBg} ${cfg.hoverText} ${cfg.hoverBorder}`
-                    } disabled:cursor-pointer`}
+                    } disabled:cursor-default`}
                   >
                     <div className="flex items-center gap-3">
                       <Icon className="h-5 w-5" />
@@ -301,12 +301,12 @@ export default function TicketDetailClient({ id }: TicketDetailClientProps) {
                         Actual
                       </span>
                     )}
-                    {!isActive && !updating && (
+                    {!isActive && updatingStatus !== status && (
                       <span className="text-lg opacity-0 transition-opacity group-hover:opacity-100">
                         &rarr;
                       </span>
                     )}
-                    {updating && !isActive && (
+                    {updatingStatus === status && (
                       <LoadingSpinner className="h-4 w-4" />
                     )}
                   </button>
